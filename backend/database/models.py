@@ -9,4 +9,5 @@ class Video(Base):
     url = Column(String, unique=True, index=True)
     title = Column(String, nullable=True)
     summary_json = Column(Text, nullable=True)
+    timeline_json = Column(Text, nullable=True) # Stores the AI-extracted key moments
     created_at = Column(DateTime, default=datetime.utcnow)

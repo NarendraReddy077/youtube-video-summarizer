@@ -1,33 +1,49 @@
 import os
-from langchain_community.llms.ollama import Ollama
+import httpx
+from langchain_ollama import ChatOllama
 from langchain_core.prompts import PromptTemplate
+from langchain_core.output_parsers import StrOutputParser
 from config import settings
 
 class SummarizationAgent:
     def __init__(self):
-        self.llm = Ollama(
+        # Set up headers for authentication if API key is provided
+        headers = {}
+        if settings.ollama_api_key:
+            headers["Authorization"] = f"Bearer {settings.ollama_api_key}"
+
+        self.llm = ChatOllama(
             model=settings.ollama_model, 
-            base_url=settings.ollama_base_url
+            base_url=settings.ollama_base_url,
+            client_kwargs={"headers": headers},
+            timeout=60.0 # Increased timeout for longer videos/slower local LLMs
         )
         self.summary_prompt = PromptTemplate.from_template(
-            """You are an expert transcriber and summarizer. You will be given a transcript of a YouTube video.
-            Please provide a comprehensive summary and extract the key insights as bullet points.
+            """You are an expert summarizer. Below is a video transcript.
+            Please provide a concise summary and extract key insights as bullet points.
             
             Transcript:
             {transcript}
             
-            Output strictly in the following JSON-like format:
-            {{ "summary": "...", "key_points": ["point 1", "point 2"] }}
+            Output STRICTLY in the following JSON format:
+            {{ "summary": "brief summary content", "key_points": ["point 1", "point 2"] }}
             """
         )
-        # Using a simpler chain for generation
-        self.chain = self.summary_prompt | self.llm
+        # Using a simpler chain for generation with a string parser
+        self.chain = self.summary_prompt | self.llm | StrOutputParser()
 
     def summarize(self, transcript_chunks: list[str]) -> str:
-        # Combining chunks here (could also use Langchain summarize chains like map_reduce, but for simplicity we join them if they fit)
-        # A full system might want Map-Reduce for very long transcripts. 
-        # For simplicity in this step, we'll try to join and summarize.
         combined_text = " ".join(transcript_chunks)
-        # We might need to handle token overflow here if the video is too long.
         print(f"Generating summary for text of length: {len(combined_text)}")
-        return self.chain.invoke({"transcript": combined_text[:10000]}) # Arbitrary cut-off to fit in context window temporarily
+        
+        try:
+            # We might need to handle token overflow here if the video is too long.
+            # Limiting to 10k characters for demo purposes
+            response = self.chain.invoke({"transcript": combined_text[:10000]})
+            return response
+        except httpx.ConnectError:
+            raise Exception(f"Connection Error: Ollama is not running at {settings.ollama_base_url}. Please ensure Ollama is started.")
+        except Exception as e:
+            if "not found" in str(e).lower():
+                raise Exception(f"Model Error: Model '{settings.ollama_model}' not found in Ollama. Please run 'ollama pull {settings.ollama_model}'.")
+            raise Exception(f"Summarization Error: {str(e)}")

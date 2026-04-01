@@ -1,11 +1,16 @@
 fastapi
 uvicorn
 pydantic
+pydantic-settings
 langchain
+langchain-core
 langchain-community
+langchain-ollama
+langchain-huggingface
+langchain-chroma
+langchain-text-splitters
 youtube-transcript-api
 chromadb
 sentence-transformers
 SQLAlchemy
-langchain_text_splitters
 langchain-classic
