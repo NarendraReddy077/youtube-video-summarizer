@@ -33,9 +33,11 @@ class TimestampAgent:
         sampled_data = []
         for i in range(0, len(transcript_timed), 10):
             seg = transcript_timed[i]
+            start = seg.get('start', 0.0) if isinstance(seg, dict) else getattr(seg, 'start', 0.0)
+            text = seg.get('text', '') if isinstance(seg, dict) else getattr(seg, 'text', '')
             sampled_data.append({
-                "t": round(seg.get('start', 0.0), 1),
-                "txt": seg.get('text', '')[:100]
+                "t": round(start, 1),
+                "txt": text[:100]
             })
         
         # Limit to first 50 sampled segments for budget
@@ -62,8 +64,9 @@ class TimestampAgent:
         formatted_text = ""
         metadata = []
         for segment in transcript_list:
-            text = segment.get('text', '')
-            start = round(segment.get('start', 0.0), 2)
+            text = segment.get('text', '') if isinstance(segment, dict) else getattr(segment, 'text', '')
+            start_val = segment.get('start', 0.0) if isinstance(segment, dict) else getattr(segment, 'start', 0.0)
+            start = round(start_val, 2)
             formatted_text += f"{text} "
             metadata.append({"start_time": start, "source_text": text})
         return formatted_text.strip(), metadata

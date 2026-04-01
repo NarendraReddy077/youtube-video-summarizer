@@ -40,7 +40,7 @@ function App() {
     <div className="min-h-screen bg-background text-textMain relative overflow-hidden selection:bg-primary/30">
       {/* Background ambient accents */}
       <div className="absolute top-0 inset-x-0 h-full bg-[radial-gradient(circle_at_50%_0%,rgba(139,92,246,0.15),transparent_50%)] pointer-events-none" />
-      
+
       {/* Dynamic Floating Blobs */}
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-primary/20 rounded-full blur-[120px] animate-blob pointer-events-none" />
       <div className="absolute top-1/2 -right-40 w-80 h-80 bg-secondary/15 rounded-full blur-[100px] animate-blob-slow pointer-events-none" />
@@ -49,16 +49,16 @@ function App() {
       <main className="container mx-auto px-6 py-16 relative z-10 max-w-7xl">
         {/* Fancy Logo/Header if needed */}
         <div className="text-center mb-16 animate-fade-in-up">
-           <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-white/5 border border-white/10 mb-6 group transition-all duration-500 hover:border-primary/50 hover:shadow-[0_0_20px_rgba(139,92,246,0.2)]">
-              <span className="text-4xl">✨</span>
-           </div>
-           <h1 className="text-5xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/60 mb-4">
-             YT Summarizer <span className="text-primary text-glow">AI</span>
-           </h1>
-           <p className="text-xl text-textMuted max-w-2xl mx-auto font-light leading-relaxed">
-             Transform long videos into <span className="text-white font-medium">instant insights</span>. 
-             Ask questions, navigate timestamps, and master content faster than ever.
-           </p>
+          <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-white/5 border border-white/10 mb-6 group transition-all duration-500 hover:border-primary/50 hover:shadow-[0_0_20px_rgba(139,92,246,0.2)]">
+            <span className="text-4xl">✨</span>
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/60 mb-4">
+            YT Summarizer <span className="text-primary text-glow">AI</span>
+          </h1>
+          <p className="text-xl text-textMuted max-w-2xl mx-auto font-light leading-relaxed">
+            Transform long videos into <span className="text-white font-medium">instant insights</span>.
+            Ask questions, navigate timestamps, and master content faster than ever.
+          </p>
         </div>
 
         <VideoInput onSubmit={handleVideoSubmit} isLoading={isLoading} />

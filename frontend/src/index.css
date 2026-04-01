@@ -1,11 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #8b5cf6; /* Vibrant Violet */
-  --color-secondary: #f472b6; /* Soft Pink */
-  --color-accent: #38bdf8; /* Sky Blue for highlights */
-  --color-background: #020617; /* Deepest Indigo/Slate */
-  --color-surface: #1e1b4b; /* Deep Indigo for cards */
+  --color-primary: #8b5cf6;
+  /* Vibrant Violet */
+  --color-secondary: #f472b6;
+  /* Soft Pink */
+  --color-accent: #38bdf8;
+  /* Sky Blue for highlights */
+  --color-background: #020617;
+  /* Deepest Indigo/Slate */
+  --color-surface: #1e1b4b;
+  /* Deep Indigo for cards */
   --color-surface-lighter: #312e81;
   --color-textMain: #f8fafc;
   --color-textMuted: #94a3b8;
@@ -16,24 +21,43 @@
   --animate-shimmer: shimmer 2s linear infinite;
 
   @keyframes blob {
-    0% { transform: translate(0px, 0px) scale(1.0); }
-    33% { transform: translate(40px, -60px) scale(1.2); }
-    66% { transform: translate(-30px, 30px) scale(0.85); }
-    100% { transform: translate(0px, 0px) scale(1.0); }
+    0% {
+      transform: translate(0px, 0px) scale(1.0);
+    }
+
+    33% {
+      transform: translate(40px, -60px) scale(1.2);
+    }
+
+    66% {
+      transform: translate(-30px, 30px) scale(0.85);
+    }
+
+    100% {
+      transform: translate(0px, 0px) scale(1.0);
+    }
   }
+
   @keyframes fade-in-up {
     from {
       opacity: 0;
       transform: translateY(30px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
+
   @keyframes shimmer {
-    from { transform: translateX(-100%); }
-    to { transform: translateX(100%); }
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: translateX(100%);
+    }
   }
 }
 
@@ -45,14 +69,17 @@
 
 @layer utilities {
   .glass-card {
-    @apply bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.6)];
+    @apply bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0, 0, 0, 0.6)];
   }
+
   .glass-card-hover {
     @apply hover:bg-white/[0.08] hover:border-white/20 transition-all duration-500;
   }
+
   .premium-gradient {
     @apply bg-gradient-to-br from-primary via-indigo-500 to-secondary;
   }
+
   .text-glow {
     text-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
   }

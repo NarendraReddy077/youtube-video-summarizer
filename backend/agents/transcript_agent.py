@@ -3,61 +3,59 @@ from youtube_transcript_api.formatters import TextFormatter
 
 class TranscriptAgent:
     @staticmethod
-    def _get_best_transcript(video_id: str):
-        """
-        Helper to find the best available transcript for a video.
-        Prioritizes:
-        1. Manually created English
-        2. Auto-generated English
-        3. Manually created in any language (translated to English)
-        4. Auto-generated in any language (translated to English)
-        """
+    def _get_transcript_data(video_id: str) -> list:
         try:
-            transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+            api = YouTubeTranscriptApi()
+            transcript_list = api.list(video_id)
             
-            # 1 & 2: Try to find English naturally
             try:
-                return transcript_list.find_transcript(['en'])
+                # Try English first (manual or generated)
+                fetched = transcript_list.find_transcript(['en']).fetch()
             except:
-                pass
+                # Fallback: try to translate any available transcript to English
+                fetched = None
+                for trans in transcript_list:
+                    if trans.is_translatable:
+                        try:
+                            fetched = trans.translate('en').fetch()
+                            break
+                        except:
+                            continue
+                
+                # Final fallback: just get the first one available in its native language
+                if not fetched:
+                    all_transcripts = list(transcript_list)
+                    if not all_transcripts:
+                        return []
+                    fetched = all_transcripts[0].fetch()
             
-            # 3 & 4: Find first available and translate to English
-            # youtube-transcript-api handles translation for most languages including auto-generated ones
-            try:
-                # Get the first available transcript (any language)
-                transcript = next(iter(transcript_list))
-                return transcript.translate('en')
-            except Exception as e:
-                print(f"Translation/Fallback failed: {e}")
-                return None
+            if hasattr(fetched, 'to_raw_data'):
+                return fetched.to_raw_data()
+            else:
+                # fetched is iterable of FetchedTranscriptSnippet
+                return [{"start": s.start, "text": s.text, "duration": s.duration} for s in fetched]
                 
         except Exception as e:
-            print(f"Error accessing transcript list: {e}")
-            return None
+            print(f"Error listing transcripts for {video_id}: {e}")
+            return []
 
     @staticmethod
     def get_transcript(video_id: str) -> str:
-        transcript_obj = TranscriptAgent._get_best_transcript(video_id)
-        if not transcript_obj:
+        data = TranscriptAgent._get_transcript_data(video_id)
+        if not data:
             return ""
         
         try:
-            transcript = transcript_obj.fetch()
+            # Try standard formatter
             formatter = TextFormatter()
-            return formatter.format_transcript(transcript)
+            return formatter.format_transcript(data)
         except Exception as e:
-            print(f"Error formatting transcript: {e}")
-            return ""
+            # Manual fallback formatting if TextFormatter fails or data structure is unexpected
+            if isinstance(data, list):
+                return " ".join([seg.get('text', '') if isinstance(seg, dict) else getattr(seg, 'text', '') for seg in data])
+            return str(data)
 
     @staticmethod
     def get_transcript_with_timestamps(video_id: str) -> list:
-        transcript_obj = TranscriptAgent._get_best_transcript(video_id)
-        if not transcript_obj:
-            return []
-        
-        try:
-            # fetch() returns a list of dictionaries with 'text', 'start', 'duration'
-            return transcript_obj.fetch()
-        except Exception as e:
-            print(f"Error fetching timed transcript: {e}")
-            return []
+        return TranscriptAgent._get_transcript_data(video_id)
+

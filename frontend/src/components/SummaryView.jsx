@@ -21,7 +21,7 @@ export default function SummaryView({ data, timeline, videoId }) {
       <div className="glass-card rounded-[2.5rem] p-8 md:p-14 overflow-hidden relative group h-full bg-surface/20">
         {/* Subtle background glow */}
         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-full blur-[100px] -mr-40 -mt-40 transition-colors duration-1000 group-hover:bg-primary/10 pointer-events-none" />
-        
+
         {/* Header Section */}
         <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16 border-b border-white/5 pb-10">
           <div className="flex items-center gap-6">
@@ -50,9 +50,9 @@ export default function SummaryView({ data, timeline, videoId }) {
               <h3 className="text-3xl font-bold text-white tracking-tight">Executive Summary</h3>
             </div>
             <div className="relative pl-6 border-l-2 border-white/5">
-               <p className="text-xl text-textMuted/90 leading-[1.9] font-light max-w-5xl text-justify">
-                 {data.summary || "Generating your video abstract..."}
-               </p>
+              <p className="text-xl text-textMuted/90 leading-[1.9] font-light max-w-5xl text-justify">
+                {data.summary || "Generating your video abstract..."}
+              </p>
             </div>
           </section>
 
@@ -62,12 +62,12 @@ export default function SummaryView({ data, timeline, videoId }) {
               <div className="w-2 h-10 bg-secondary rounded-full" />
               <h3 className="text-3xl font-bold text-white tracking-tight">Core Takeaways</h3>
             </div>
-            
+
             {data.key_points && data.key_points.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {data.key_points.map((point, idx) => (
-                  <div 
-                    key={idx} 
+                  <div
+                    key={idx}
                     className="p-8 rounded-[2rem] bg-white/[0.03] border border-white/5 flex gap-6 group/item hover:bg-white/[0.06] hover:border-white/10 transition-all duration-500 animate-fade-in-up"
                     style={{ animationDelay: `${idx * 100}ms` }}
                   >
