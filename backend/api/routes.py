@@ -65,8 +65,8 @@ async def process_video(request: VideoRequest, db: Session = Depends(get_db)):
 
     # 2. Get Transcript
     transcript_raw = transcript_agent.get_transcript(video_id)
-    if not transcript_raw:
-        raise HTTPException(status_code=400, detail="Could not fetch transcript for this video. Please ensure the video has captions available.")
+    if not transcript_raw or len(transcript_raw.strip()) < 5:
+        raise HTTPException(status_code=400, detail="This video does not have available captions. Please try a video with manual or auto-generated subtitles.")
 
     transcript_timed = transcript_agent.get_transcript_with_timestamps(video_id)
     key_moments = timestamp_agent.extract_key_moments(transcript_timed)

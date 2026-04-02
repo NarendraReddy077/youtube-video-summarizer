@@ -8,12 +8,13 @@ class TranscriptAgent:
             api = YouTubeTranscriptApi()
             transcript_list = api.list(video_id)
             
+            fetched = None
+            
+            # 1. Try to find English transcripts (manual OR generated)
             try:
-                # Try English first (manual or generated)
                 fetched = transcript_list.find_transcript(['en']).fetch()
             except:
-                # Fallback: try to translate any available transcript to English
-                fetched = None
+                # 2. Try to translate ANY existing transcript to English
                 for trans in transcript_list:
                     if trans.is_translatable:
                         try:
@@ -22,21 +23,34 @@ class TranscriptAgent:
                         except:
                             continue
                 
-                # Final fallback: just get the first one available in its native language
+                # 3. Final fallback: just get the first one available in its native language
                 if not fetched:
                     all_transcripts = list(transcript_list)
-                    if not all_transcripts:
-                        return []
-                    fetched = all_transcripts[0].fetch()
+                    if all_transcripts:
+                        fetched = all_transcripts[0].fetch()
             
-            if hasattr(fetched, 'to_raw_data'):
-                return fetched.to_raw_data()
-            else:
-                # fetched is iterable of FetchedTranscriptSnippet
-                return [{"start": s.start, "text": s.text, "duration": s.duration} for s in fetched]
+            if not fetched:
+                return []
+                
+            # Consistent data normalization: ensure it's a list of dicts
+            normalized = []
+            for s in fetched:
+                if isinstance(s, dict):
+                    normalized.append({
+                        "start": s.get('start', 0.0),
+                        "text": s.get('text', ''),
+                        "duration": s.get('duration', 0.0)
+                    })
+                else:
+                    normalized.append({
+                        "start": getattr(s, 'start', 0.0),
+                        "text": getattr(s, 'text', ''),
+                        "duration": getattr(s, 'duration', 0.0)
+                    })
+            return normalized
                 
         except Exception as e:
-            print(f"Error listing transcripts for {video_id}: {e}")
+            print(f"Transcript Error for {video_id}: {e}")
             return []
 
     @staticmethod

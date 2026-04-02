@@ -18,7 +18,9 @@ class TimestampAgent:
         self.timestamp_prompt = PromptTemplate.from_template(
             """You are a video editor and content analyst.
             Below is a YouTube transcript with timestamps (seconds).
-            Please identify 5-7 key moments or sections in the video and provide a clear subtitle for each marker.
+            
+            IMPORTANT: If the transcript is not in English, you MUST still provide the labels in English.
+            Identify 5-7 key moments or sections in the video and provide a clear English subtitle/label for each marker.
             
             Transcript Data:
             {transcript_data}

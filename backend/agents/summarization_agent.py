@@ -20,13 +20,14 @@ class SummarizationAgent:
         )
         self.summary_prompt = PromptTemplate.from_template(
             """You are an expert summarizer. Below is a video transcript.
-            Please provide a concise summary and extract key insights as bullet points.
+            
+            IMPORTANT: If the transcript is not in English, you MUST still provide the summary and key points in English.
             
             Transcript:
             {transcript}
             
             Output STRICTLY in the following JSON format:
-            {{ "summary": "brief summary content", "key_points": ["point 1", "point 2"] }}
+            {{ "summary": "concise English summary", "key_points": ["English point 1", "English point 2"] }}
             """
         )
         # Using a simpler chain for generation with a string parser
@@ -37,13 +38,16 @@ class SummarizationAgent:
         print(f"Generating summary for text of length: {len(combined_text)}")
         
         try:
-            # We might need to handle token overflow here if the video is too long.
-            # Limiting to 10k characters for demo purposes
-            response = self.chain.invoke({"transcript": combined_text[:10000]})
+            # Limiting to 12k characters for demo purposes, roughly 3000-4000 tokens
+            response = self.chain.invoke({"transcript": combined_text[:12000]})
             return response
         except httpx.ConnectError:
             raise Exception(f"Connection Error: Ollama is not running at {settings.ollama_base_url}. Please ensure Ollama is started.")
         except Exception as e:
-            if "not found" in str(e).lower():
-                raise Exception(f"Model Error: Model '{settings.ollama_model}' not found in Ollama. Please run 'ollama pull {settings.ollama_model}'.")
-            raise Exception(f"Summarization Error: {str(e)}")
+            err_str = str(e)
+            if "not found" in err_str.lower():
+                raise Exception(f"Model '{settings.ollama_model}' not found in Ollama. Please run 'ollama pull {settings.ollama_model}'.")
+            # Avoid redundant prefixing
+            if "summarization error" in err_str.lower():
+                raise Exception(err_str)
+            raise Exception(f"Summarization Error: {err_str}")
