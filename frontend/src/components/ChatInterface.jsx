@@ -33,59 +33,48 @@ export default function ChatInterface({ videoId }) {
   };
 
   return (
-    <div className="w-full h-full min-h-[600px] flex flex-col glass-card rounded-[2rem] overflow-hidden group transition-all duration-500 hover:shadow-[0_20px_60px_rgba(0,0,0,0.8)] border-white/5 relative bg-surface/30 backdrop-blur-3xl animate-fade-in-up">
+    <div className="w-full h-full min-h-[600px] flex flex-col glass-card rounded-[2rem] overflow-hidden group transition-all duration-500 border-white/10 relative bg-surface/30 backdrop-blur-3xl animate-fade-in-up aurora-border">
       {/* Header */}
-      <div className="p-8 pb-6 border-b border-white/5 flex items-center justify-between bg-white/[0.02] relative overflow-hidden">
+      <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/[0.03] relative overflow-hidden">
         <div className="flex items-center gap-4 relative z-10">
-          <div className="p-3 rounded-2xl bg-secondary/10 border border-secondary/20">
-            <MessageCircle className="text-secondary" size={24} />
+          <div className="p-3 rounded-xl bg-secondary/20 border border-secondary/30">
+            <MessageCircle className="text-secondary" size={20} />
           </div>
           <div>
-            <h3 className="text-2xl font-bold text-white tracking-tight">Chat with Video</h3>
-            <p className="text-xs text-textMuted font-bold uppercase tracking-widest opacity-60">AI Assistant Active</p>
+            <h3 className="text-xl font-black text-white tracking-tight leading-none mb-1">Video Chat</h3>
+            <p className="text-[8px] text-textMuted font-black uppercase tracking-[0.2em] opacity-40">AI Context Active</p>
           </div>
         </div>
-        <div className="p-2 rounded-full bg-white/5 border border-white/10 text-white/40">
-           <Sparkles size={18} />
+        <div className="p-2 rounded-full bg-white/5 border border-white/10 text-white/30">
+           <Sparkles size={16} />
         </div>
-        {/* Header background glow */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-full blur-3xl -mr-16 -mt-16" />
       </div>
       
       {/* Messages Scroll Area */}
-      <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar relative">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar relative">
         {messages.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center space-y-6 opacity-40 py-20 grayscale hover:grayscale-0 transition-all duration-700">
-            <div className="p-6 rounded-full bg-white/5 border border-white/10 animate-bounce-slow">
-              <Bot size={48} className="text-textMuted" />
+          <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-30 py-10">
+            <div className="p-5 rounded-full bg-white/5 border border-white/10">
+               <Bot size={40} className="text-textMuted" />
             </div>
-            <div className="space-y-2">
-               <p className="text-xl font-medium text-white">The video is processed.</p>
-               <p className="text-textMuted max-w-xs mx-auto">Ask me anything about the content, specific moments, or key concepts.</p>
-            </div>
+            <p className="text-base font-bold text-white tracking-tight">How can I help?</p>
           </div>
         ) : (
           messages.map((msg, idx) => (
             <div key={idx} className={`flex ${msg.isBot ? 'justify-start' : 'justify-end'} animate-fade-in-up`}>
-              <div className={`group/msg relative flex flex-col gap-2 max-w-[85%] ${msg.isBot ? 'items-start' : 'items-end'}`}>
-                 <div className={`flex items-center gap-2 mb-1 px-2 ${msg.isBot ? 'flex-row' : 'flex-row-reverse'}`}>
-                    <div className={`p-1.5 rounded-lg border border-white/10 ${msg.isBot ? 'bg-white/5' : 'bg-primary/20 text-primary'}`}>
-                       {msg.isBot ? <Bot size={14} /> : <User size={14} />}
-                    </div>
-                    <span className="text-[10px] font-bold tracking-widest uppercase opacity-40">{msg.isBot ? 'Assistant' : 'You'}</span>
+              <div className={`group/msg relative flex flex-col gap-2 max-w-[95%] ${msg.isBot ? 'items-start' : 'items-end'}`}>
+                 <div className={`flex items-center gap-2 mb-0.5 px-2 ${msg.isBot ? 'flex-row' : 'flex-row-reverse'}`}>
+                    <span className="text-[9px] font-black tracking-widest uppercase opacity-30">{msg.isBot ? 'AI' : 'YOU'}</span>
                  </div>
                  
-                 <div className={`rounded-3xl p-6 shadow-2xl relative overflow-hidden transition-all duration-300 ${
+                 <div className={`rounded-2xl p-4 shadow-xl transition-all duration-300 ${
                     msg.isError 
-                      ? 'bg-red-500/10 border border-red-500/20 text-red-300 rounded-tl-sm' 
+                      ? 'bg-red-500/15 border border-red-500/30 text-red-200' 
                       : msg.isBot 
-                        ? 'bg-white/5 border border-white/5 text-textMuted rounded-tl-sm hover:bg-white/[0.08] hover:border-white/10' 
-                        : 'premium-gradient text-white rounded-tr-sm shadow-[0_10px_30px_rgba(139,92,246,0.3)]'
+                        ? 'bg-white/[0.04] border border-white/10 text-textMuted rounded-tl-none' 
+                        : 'premium-gradient text-white rounded-tr-none'
                   }`}>
-                    {/* User bubble internal shine */}
-                    {!msg.isBot && <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-tr from-white/0 via-white/5 to-white/20 pointer-events-none" />}
-                    
-                    <p className="text-[17px] leading-relaxed relative z-10 whitespace-pre-wrap font-light">
+                    <p className="text-sm font-semibold leading-relaxed tracking-tight">
                       {msg.text}
                     </p>
                  </div>
@@ -96,13 +85,13 @@ export default function ChatInterface({ videoId }) {
         
         {isLoading && (
           <div className="flex justify-start animate-fade-in-up">
-            <div className="bg-white/5 border border-white/5 rounded-3xl p-6 rounded-tl-sm flex items-center gap-3">
-              <span className="flex gap-1.5">
-                <span className="w-2 h-2 bg-secondary rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                <span className="w-2 h-2 bg-secondary rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                <span className="w-2 h-2 bg-secondary rounded-full animate-bounce"></span>
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4 rounded-tl-none flex items-center gap-4">
+              <span className="flex gap-1.5 focus-within:">
+                <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-bounce"></div>
               </span>
-              <span className="text-xs font-bold uppercase tracking-widest text-textMuted/60 ml-2">Analysing video...</span>
+              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-textMuted/40">Processing...</span>
             </div>
           </div>
         )}
@@ -110,27 +99,24 @@ export default function ChatInterface({ videoId }) {
       </div>
 
       {/* Input Area */}
-      <div className="p-8 pt-4 bg-white/[0.01] border-t border-white/5 backdrop-blur-xl">
-        <div className="relative group/input">
-          <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-3xl blur opacity-0 group-focus-within/input:opacity-100 transition-opacity duration-700" />
-          <div className="relative flex items-center bg-surface/50 rounded-2xl border border-white/10 focus-within:border-primary/50 transition-all duration-300 overflow-hidden">
-            <input
-              type="text"
-              className="flex-1 bg-transparent px-8 py-5 text-white placeholder-textMuted/50 focus:outline-none text-lg font-light"
-              placeholder={isLoading ? "Please wait..." : "Ask me anything about the content..."}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              disabled={!videoId || isLoading}
-            />
-            <button
-              onClick={handleSend}
-              disabled={!videoId || !input.trim() || isLoading}
-              className="mr-3 p-4 premium-gradient text-white rounded-xl shadow-xl hover:shadow-primary/50 disabled:opacity-30 disabled:grayscale transition-all duration-500 active:scale-95 flex items-center justify-center transform focus:outline-none group/btn"
-            >
-              <Send size={22} className={`${isLoading ? "animate-pulse" : "group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1"} transition-transform duration-300`} />
-            </button>
-          </div>
+      <div className="p-6 bg-white/[0.02] border-t border-white/10 backdrop-blur-3xl">
+        <div className="relative flex items-center bg-surface/60 rounded-xl border border-white/10 focus-within:border-primary transition-all duration-300">
+          <input
+            type="text"
+            className="flex-1 bg-transparent px-5 py-4 text-white placeholder-textMuted/30 focus:outline-none text-base font-semibold"
+            placeholder={isLoading ? "Analyzing..." : "Ask a question..."}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            disabled={!videoId || isLoading}
+          />
+          <button
+            onClick={handleSend}
+            disabled={!videoId || !input.trim() || isLoading}
+            className="mr-2 p-3 premium-gradient text-white rounded-lg shadow-lg hover:brightness-110 disabled:opacity-20 transition-all duration-300"
+          >
+            <Send size={18} className="stroke-[2.5px]" />
+          </button>
         </div>
       </div>
     </div>

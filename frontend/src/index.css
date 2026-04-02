@@ -1,86 +1,63 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #8b5cf6;
-  /* Vibrant Violet */
-  --color-secondary: #f472b6;
-  /* Soft Pink */
-  --color-accent: #38bdf8;
-  /* Sky Blue for highlights */
-  --color-background: #020617;
-  /* Deepest Indigo/Slate */
-  --color-surface: #1e1b4b;
-  /* Deep Indigo for cards */
-  --color-surface-lighter: #312e81;
-  --color-textMain: #f8fafc;
+  --color-primary: #14b8a6;   /* Teal Aurora */
+  --color-secondary: #6366f1; /* Electric Indigo */
+  --color-accent: #f59e0b;    /* Golden Sunset */
+  --color-background: #030712; /* Rich Midnight Black */
+  --color-surface: #0f172a;    /* Navy Blue Surface */
+  --color-surface-lighter: #1e293b;
+  --color-textMain: #f1f5f9;
   --color-textMuted: #94a3b8;
 
-  --animate-blob: blob 9s infinite;
-  --animate-blob-slow: blob 15s infinite;
-  --animate-fade-in-up: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-blob: blob 10s infinite;
+  --animate-blob-slow: blob 18s infinite;
+  --animate-fade-in-up: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-float: float 6s ease-in-out infinite;
 
   @keyframes blob {
-    0% {
-      transform: translate(0px, 0px) scale(1.0);
-    }
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(60px, -80px) scale(1.15); }
+    66% { transform: translate(-40px, 40px) scale(0.9); }
+    100% { transform: translate(0, 0) scale(1); }
+  }
 
-    33% {
-      transform: translate(40px, -60px) scale(1.2);
-    }
-
-    66% {
-      transform: translate(-30px, 30px) scale(0.85);
-    }
-
-    100% {
-      transform: translate(0px, 0px) scale(1.0);
-    }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
   }
 
   @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes shimmer {
-    from {
-      transform: translateX(-100%);
-    }
-
-    to {
-      transform: translateX(100%);
-    }
+    from { opacity: 0; transform: translateY(40px); filter: blur(4px); }
+    to { opacity: 1; transform: translateY(0); filter: blur(0); }
   }
 }
 
 @layer base {
   body {
-    @apply bg-background text-textMain antialiased font-sans m-0 p-0 overflow-x-hidden selection:bg-primary/40;
+    @apply bg-background text-textMain antialiased m-0 p-0 overflow-x-hidden selection:bg-primary/40;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
   }
 }
 
 @layer utilities {
   .glass-card {
-    @apply bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0, 0, 0, 0.6)];
-  }
-
-  .glass-card-hover {
-    @apply hover:bg-white/[0.08] hover:border-white/20 transition-all duration-500;
+    @apply bg-surface/40 backdrop-blur-3xl border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.4)];
   }
 
   .premium-gradient {
-    @apply bg-gradient-to-br from-primary via-indigo-500 to-secondary;
+    @apply bg-gradient-to-br from-primary/80 via-secondary to-indigo-700;
   }
 
-  .text-glow {
-    text-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+  .aurora-border {
+    @apply relative after:absolute after:inset-0 after:p-[1px] after:bg-gradient-to-r after:from-primary/50 after:via-secondary/50 after:to-accent/50 after:rounded-[inherit] after:-z-10 after:content-[''];
+  }
+
+  .text-glow-primary {
+    text-shadow: 0 0 15px rgba(20, 184, 166, 0.5);
   }
 }

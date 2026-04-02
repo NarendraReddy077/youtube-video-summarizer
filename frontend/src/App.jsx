@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import VideoInput from './components/VideoInput';
 import SummaryView from './components/SummaryView';
 import ChatInterface from './components/ChatInterface';
 import { processVideo } from './services/api';
 import { Info } from 'lucide-react';
+import Logo from './assets/Logo.png';
 
 function App() {
   const [videoId, setVideoId] = useState(null);
@@ -11,8 +12,18 @@ function App() {
   const [timeline, setTimeline] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const mainRef = useRef(null);
+
+  useEffect(() => {
+    if (summaryData) {
+      window.scrollTo(0, 0);
+      mainRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' });
+    }
+  }, [summaryData]);
 
   const handleVideoSubmit = async (url) => {
+    window.scrollTo(0, 0);
+    mainRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' });
     setIsLoading(true);
     setError(null);
     setVideoId(null);
@@ -37,47 +48,74 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-textMain relative overflow-hidden selection:bg-primary/30">
-      {/* Background ambient accents */}
-      <div className="absolute top-0 inset-x-0 h-full bg-[radial-gradient(circle_at_50%_0%,rgba(139,92,246,0.15),transparent_50%)] pointer-events-none" />
+    <div className="min-h-screen bg-background text-textMain relative selection:bg-primary/30">
+      {/* Dynamic Aurora Glows */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 rounded-full blur-[120px] animate-blob pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/15 rounded-full blur-[100px] animate-blob-slow pointer-events-none" />
 
-      {/* Dynamic Floating Blobs */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-primary/20 rounded-full blur-[120px] animate-blob pointer-events-none" />
-      <div className="absolute top-1/2 -right-40 w-80 h-80 bg-secondary/15 rounded-full blur-[100px] animate-blob-slow pointer-events-none" />
-      <div className="absolute -bottom-40 left-1/3 w-96 h-96 bg-accent/10 rounded-full blur-[120px] animate-blob pointer-events-none" />
+      {/* Modern Grid Overlay */}
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none contrast-150 brightness-100"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
 
-      <main className="container mx-auto px-6 py-16 relative z-10 max-w-7xl">
-        {/* Fancy Logo/Header if needed */}
-        <div className="text-center mb-16 animate-fade-in-up">
-          <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-white/5 border border-white/10 mb-6 group transition-all duration-500 hover:border-primary/50 hover:shadow-[0_0_20px_rgba(139,92,246,0.2)]">
-            <span className="text-4xl">✨</span>
+      <main ref={mainRef} className="container mx-auto px-6 py-10 relative z-10 max-w-7xl">
+        {/* Large Header - Landing Only */}
+        {!summaryData && (
+          <header className="text-center mb-16 pt-10 animate-fade-in-up">
+            <div className="inline-block mb-8">
+              <img src={Logo} alt="Logo" className="w-24 h-24 md:w-32 md:h-32 object-contain animate-float" />
+            </div>
+
+            <h1 className="text-6xl md:text-7xl font-black tracking-tight mb-6">
+              <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">YT Summarizer</span>
+              <br />
+              <span className="text-primary text-glow-primary">Intelligence</span>
+            </h1>
+
+            <p className="text-xl text-textMuted max-w-3xl mx-auto font-medium leading-relaxed">
+              Unlock the power of search, summarization, and interactive deep-dives for any YouTube video.
+              Powered by advanced AI models.
+            </p>
+          </header>
+        )}
+
+        {/* Compact Header - Post-Summary */}
+        {summaryData && (
+          <div className="flex items-center justify-between mb-8 animate-fade-in-up">
+            <div className="flex items-center gap-4">
+              <img src={Logo} alt="Logo" className="w-10 h-10 object-contain" />
+              <h1 className="text-2xl font-black tracking-tight text-white">
+                YT <span className="text-primary text-glow-primary">Intelligence</span>
+              </h1>
+            </div>
+            <button
+              onClick={() => {
+                setSummaryData(null);
+                setVideoId(null);
+              }}
+              className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-textMuted hover:text-white transition-all"
+            >
+              New Search
+            </button>
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/60 mb-4">
-            YT Summarizer <span className="text-primary text-glow">AI</span>
-          </h1>
-          <p className="text-xl text-textMuted max-w-2xl mx-auto font-light leading-relaxed">
-            Transform long videos into <span className="text-white font-medium">instant insights</span>.
-            Ask questions, navigate timestamps, and master content faster than ever.
-          </p>
-        </div>
+        )}
 
-        <VideoInput onSubmit={handleVideoSubmit} isLoading={isLoading} />
+        <section className={`relative z-20 transition-all duration-700 ${summaryData ? 'mb-10' : ''}`}>
+          <VideoInput onSubmit={handleVideoSubmit} isLoading={isLoading} />
+        </section>
 
         {error && (
-          <div className="mt-8 max-w-3xl mx-auto glass-card border-red-500/20 text-red-400 p-6 rounded-3xl flex items-center gap-4 animate-fade-in-up">
-            <div className="p-3 rounded-full bg-red-500/10">
-              <Info size={24} className="flex-shrink-0" />
-            </div>
-            <p className="text-lg leading-relaxed">{error}</p>
+          <div className="mt-8 max-w-3xl mx-auto glass-card border-red-500/30 text-red-200 p-6 rounded-3xl flex items-start gap-4 animate-fade-in-up">
+            <Info size={24} className="text-red-400 mt-1" />
+            <p className="text-lg opacity-80">{error}</p>
           </div>
         )}
 
         {summaryData && (
-          <div className="mt-20 grid grid-cols-1 lg:grid-cols-5 gap-10 items-start pb-20">
-            <div className="lg:col-span-3 h-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pb-32">
+            <div className="lg:col-span-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               <SummaryView data={summaryData} timeline={timeline} videoId={videoId} />
             </div>
-            <div className="lg:col-span-2 h-full">
+            <div className="lg:col-span-4 sticky top-10 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
               <ChatInterface videoId={videoId} />
             </div>
           </div>
