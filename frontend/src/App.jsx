@@ -48,14 +48,23 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-textMain relative selection:bg-primary/30">
-      {/* Dynamic Aurora Glows */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 rounded-full blur-[120px] animate-blob pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/15 rounded-full blur-[100px] animate-blob-slow pointer-events-none" />
+    <div className="min-h-screen bg-background text-textMain relative selection:bg-primary/30 overflow-x-hidden">
+      {/* Intelligence Background System */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        {/* Technical Data Grid - Refined */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8b5cf60a_1px,transparent_1px),linear-gradient(to_bottom,#8b5cf60a_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_0%,#000_30%,transparent_90%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#14b8a605_1px,transparent_1px),linear-gradient(to_bottom,#14b8a605_1px,transparent_1px)] bg-[size:128px_128px] [mask-image:radial-gradient(ellipse_90%_90%_at_50%_20%,#000_50%,transparent_100%)]" />
 
-      {/* Modern Grid Overlay */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none contrast-150 brightness-100"></div>
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
+        {/* Dynamic Scanlines */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[size:100%_4px,3px_100%] pointer-events-none opacity-20" />
+
+        {/* Focused Intelligence Glows */}
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[70%] bg-primary/10 rounded-full blur-[140px] animate-blob pointer-events-none opacity-60" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[60%] bg-accent/10 rounded-full blur-[120px] animate-blob-slow pointer-events-none opacity-40" />
+
+        {/* Subtle Noise Texture */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.12] mix-blend-overlay contrast-150 brightness-100" />
+      </div>
 
       <main ref={mainRef} className="container mx-auto px-6 py-10 relative z-10 max-w-7xl">
         {/* Large Header - Landing Only */}

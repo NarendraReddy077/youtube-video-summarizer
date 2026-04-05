@@ -33,63 +33,59 @@ export default function ChatInterface({ videoId }) {
   };
 
   return (
-    <div className="w-full h-full min-h-[600px] flex flex-col glass-card rounded-[2rem] overflow-hidden group transition-all duration-500 border-white/10 relative bg-surface/30 backdrop-blur-3xl animate-fade-in-up aurora-border">
+    <div className="w-full h-[700px] flex flex-col glass-card rounded-[2.5rem] overflow-hidden group transition-all duration-500 border-white/10 relative animate-fade-in-up aurora-border">
       {/* Header */}
       <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/[0.03] relative overflow-hidden">
         <div className="flex items-center gap-4 relative z-10">
-          <div className="p-3 rounded-xl bg-secondary/20 border border-secondary/30">
-            <MessageCircle className="text-secondary" size={20} />
+          <div className="p-3 rounded-xl bg-accent/10 border border-accent/20">
+            <MessageCircle className="text-accent" size={20} />
           </div>
           <div>
-            <h3 className="text-xl font-black text-white tracking-tight leading-none mb-1">Video Chat</h3>
-            <p className="text-[8px] text-textMuted font-black uppercase tracking-[0.2em] opacity-40">AI Context Active</p>
+            <h3 className="text-xl font-black text-yellow-300 tracking-tight leading-none mb-1">Video Chat</h3>
+            <p className="text-[8px] text-textMuted font-black uppercase tracking-[0.2em] opacity-60">AI Context Active</p>
           </div>
         </div>
-        <div className="p-2 rounded-full bg-white/5 border border-white/10 text-white/30">
-           <Sparkles size={16} />
-        </div>
       </div>
-      
+
       {/* Messages Scroll Area */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar relative">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar relative bg-white/[0.01]">
         {messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-30 py-10">
             <div className="p-5 rounded-full bg-white/5 border border-white/10">
-               <Bot size={40} className="text-textMuted" />
+              <Bot size={40} className="text-textMuted" />
             </div>
             <p className="text-base font-bold text-white tracking-tight">How can I help?</p>
           </div>
         ) : (
           messages.map((msg, idx) => (
             <div key={idx} className={`flex ${msg.isBot ? 'justify-start' : 'justify-end'} animate-fade-in-up`}>
-              <div className={`group/msg relative flex flex-col gap-2 max-w-[95%] ${msg.isBot ? 'items-start' : 'items-end'}`}>
-                 <div className={`flex items-center gap-2 mb-0.5 px-2 ${msg.isBot ? 'flex-row' : 'flex-row-reverse'}`}>
-                    <span className="text-[9px] font-black tracking-widest uppercase opacity-30">{msg.isBot ? 'AI' : 'YOU'}</span>
-                 </div>
-                 
-                 <div className={`rounded-2xl p-4 shadow-xl transition-all duration-300 ${
-                    msg.isError 
-                      ? 'bg-red-500/15 border border-red-500/30 text-red-200' 
-                      : msg.isBot 
-                        ? 'bg-white/[0.04] border border-white/10 text-textMuted rounded-tl-none' 
-                        : 'premium-gradient text-white rounded-tr-none'
+              <div className={`group/msg relative flex flex-col gap-2 max-w-[85%] ${msg.isBot ? 'items-start' : 'items-end'}`}>
+                <div className={`flex items-center gap-2 mb-0.5 px-2 ${msg.isBot ? 'flex-row' : 'flex-row-reverse'}`}>
+                  <span className="text-[9px] font-black tracking-widest uppercase opacity-40">{msg.isBot ? 'AI' : 'YOU'}</span>
+                </div>
+
+                <div className={`rounded-2xl p-4 transition-all duration-300 border ${msg.isError
+                  ? 'bg-red-500/15 border-red-500/30 text-red-200'
+                  : msg.isBot
+                    ? 'bg-white/5 border-white/10 text-textMuted rounded-tl-none font-medium'
+                    : 'bg-accent/20 border-accent/30 text-white rounded-tr-none font-semibold'
                   }`}>
-                    <p className="text-sm font-semibold leading-relaxed tracking-tight">
-                      {msg.text}
-                    </p>
-                 </div>
+                  <p className="text-sm leading-relaxed tracking-tight">
+                    {msg.text}
+                  </p>
+                </div>
               </div>
             </div>
           ))
         )}
-        
+
         {isLoading && (
           <div className="flex justify-start animate-fade-in-up">
             <div className="bg-white/5 border border-white/10 rounded-xl p-4 rounded-tl-none flex items-center gap-4">
               <span className="flex gap-1.5 focus-within:">
-                <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-bounce"></div>
+                <div className="w-1.5 h-1.5 bg-accent/40 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                <div className="w-1.5 h-1.5 bg-accent/40 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                <div className="w-1.5 h-1.5 bg-accent/40 rounded-full animate-bounce"></div>
               </span>
               <span className="text-[9px] font-black uppercase tracking-[0.2em] text-textMuted/40">Processing...</span>
             </div>
@@ -99,11 +95,11 @@ export default function ChatInterface({ videoId }) {
       </div>
 
       {/* Input Area */}
-      <div className="p-6 bg-white/[0.02] border-t border-white/10 backdrop-blur-3xl">
-        <div className="relative flex items-center bg-surface/60 rounded-xl border border-white/10 focus-within:border-primary transition-all duration-300">
+      <div className="p-6 bg-white/[0.04] border-t border-white/10 backdrop-blur-3xl">
+        <div className="relative flex items-center bg-white/5 rounded-2xl border border-white/10 focus-within:border-accent/40 transition-all duration-300">
           <input
             type="text"
-            className="flex-1 bg-transparent px-5 py-4 text-white placeholder-textMuted/30 focus:outline-none text-base font-semibold"
+            className="flex-1 bg-transparent px-5 py-4 text-white placeholder-textMuted/40 focus:outline-none text-sm font-semibold"
             placeholder={isLoading ? "Analyzing..." : "Ask a question..."}
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -113,7 +109,7 @@ export default function ChatInterface({ videoId }) {
           <button
             onClick={handleSend}
             disabled={!videoId || !input.trim() || isLoading}
-            className="mr-2 p-3 premium-gradient text-white rounded-lg shadow-lg hover:brightness-110 disabled:opacity-20 transition-all duration-300"
+            className="mr-2 p-3 bg-accent hover:brightness-110 text-white rounded-xl shadow-[0_0_15px_rgba(139,92,246,0.2)] disabled:opacity-20 transition-all duration-300"
           >
             <Send size={18} className="stroke-[2.5px]" />
           </button>

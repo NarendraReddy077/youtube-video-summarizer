@@ -57,15 +57,15 @@ export default function VideoInput({ onSubmit, isLoading }) {
       {/* Search Hints/Sub-info */}
       <div className="flex flex-wrap justify-center gap-10 mt-12 text-md text-textMuted font-bold uppercase tracking-widest animate-fade-in-up [animation-delay:300ms]">
          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_#14b8a6]" />
+            <span className="w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_rgba(20,184,166,0.6)]" />
             AI Synthesis
          </div>
          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-secondary shadow-[0_0_10px_#6366f1]" />
+            <span className="w-2 h-2 rounded-full bg-secondary shadow-[0_0_10px_rgba(34,211,238,0.6)]" />
             Semantic Engine
          </div>
          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-accent shadow-[0_0_10px_#f59e0b]" />
+            <span className="w-2 h-2 rounded-full bg-accent shadow-[0_0_10px_rgba(139,92,246,0.6)]" />
             Context Aware
          </div>
       </div>

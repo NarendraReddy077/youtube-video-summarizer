@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Clock, PlayCircle, Download } from 'lucide-react';
+import { Sparkles, Clock, PlayCircle, Download, BrainCircuit, Clapperboard } from 'lucide-react';
 
 export default function SummaryView({ data, timeline, videoId }) {
   if (!data) return null;
@@ -45,16 +45,16 @@ export default function SummaryView({ data, timeline, videoId }) {
 
   return (
     <div className="w-full h-full space-y-6 animate-fade-in-up">
-      <div className="glass-card rounded-[2.5rem] p-8 md:p-10 overflow-hidden relative group h-full bg-surface/20 aurora-border">
+      <div className="glass-card rounded-[2.5rem] p-8 md:p-10 overflow-hidden relative group h-full aurora-border">
         {/* Header Section */}
         <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10 border-b border-white/10 pb-8">
           <div className="flex items-center gap-5">
-            <div className="premium-gradient p-4 rounded-2xl shadow-[0_0_30px_rgba(20,184,166,0.3)]">
-              <Sparkles className="w-8 h-8 text-white" />
+            <div className="premium-gradient p-4 rounded-2xl shadow-[0_0_30px_rgba(139,92,246,0.3)]">
+              <Clapperboard className="w-8 h-8 text-white" />
             </div>
             <div>
-              <h2 className="text-3xl font-black text-white tracking-tight text-glow-primary">Video Analytics</h2>
-              <p className="text-textMuted font-bold tracking-widest text-[9px] uppercase opacity-40">Semantic Processing Engine</p>
+              <h2 className="text-3xl font-black text-yellow-300 tracking-tight text-glow-primary">Video Analytics</h2>
+              <p className="text-textMuted font-bold tracking-widest text-[9px] uppercase opacity-60">Semantic Processing Engine</p>
             </div>
           </div>
 
@@ -81,10 +81,10 @@ export default function SummaryView({ data, timeline, videoId }) {
             {/* Executive Summary */}
             <section className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="h-6 w-1 bg-primary rounded-full" />
+                <div className="h-6 w-1 bg-primary rounded-full shadow-[0_0_10px_rgba(20,184,166,0.6)]" />
                 <h3 className="text-xl font-bold text-white uppercase tracking-wider">The Summary</h3>
               </div>
-              <p className="text-lg text-textMuted leading-relaxed font-medium">
+              <p className="text-lg text-textMain leading-relaxed font-medium">
                 {data.summary || "Generating abstract..."}
               </p>
             </section>
@@ -92,16 +92,16 @@ export default function SummaryView({ data, timeline, videoId }) {
             {/* Key Takeaways */}
             <section className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="h-6 w-1 bg-secondary rounded-full" />
+                <div className="h-6 w-1 bg-secondary rounded-full shadow-[0_0_10px_rgba(34,211,238,0.6)]" />
                 <h3 className="text-xl font-bold text-white uppercase tracking-wider">Key Insights</h3>
               </div>
               <div className="grid grid-cols-1 gap-3">
                 {data.key_points?.map((point, idx) => (
                   <div key={idx} className="p-4 rounded-xl bg-white/[0.03] border border-white/5 flex gap-4 group/item hover:bg-white/[0.06] transition-all duration-300">
-                    <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-surface-lighter flex items-center justify-center border border-white/10 text-primary font-black text-xs">
+                    <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 text-secondary font-black text-xs">
                       {idx + 1}
                     </span>
-                    <p className="text-base text-textMuted group-hover/item:text-white transition-colors duration-300 font-semibold">
+                    <p className="text-base text-textMuted group-hover/item:text-textMain transition-colors duration-300 font-semibold">
                       {point}
                     </p>
                   </div>
@@ -114,7 +114,7 @@ export default function SummaryView({ data, timeline, videoId }) {
           {timeline && timeline.length > 0 && (
             <section className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="h-6 w-1 bg-accent rounded-full" />
+                <div className="h-6 w-1 bg-accent rounded-full shadow-[0_0_10px_rgba(139,92,246,0.6)]" />
                 <h3 className="text-xl font-bold text-white uppercase tracking-wider">Timeline</h3>
               </div>
               <div className="max-h-[500px] overflow-y-auto pr-2 custom-scrollbar space-y-2">
@@ -128,7 +128,7 @@ export default function SummaryView({ data, timeline, videoId }) {
                       <Clock size={14} className="stroke-[2.5px]" />
                       {formatTime(item.time)}
                     </div>
-                    <span className="text-md font-semibold text-textMuted group-hover/time:text-white transition-colors flex-1 truncate">
+                    <span className="text-md font-semibold text-textMuted group-hover/time:text-textMain transition-colors flex-1 truncate">
                       {item.label}
                     </span>
                     <PlayCircle size={20} className="text-primary opacity-0 group-hover/time:opacity-100 transition-all" />
