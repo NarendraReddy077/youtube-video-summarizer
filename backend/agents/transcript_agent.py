@@ -57,16 +57,21 @@ class TranscriptAgent:
     def get_transcript(video_id: str) -> str:
         data = TranscriptAgent._get_transcript_data(video_id)
         if not data:
+            print(f"[TranscriptAgent] No transcript data found for {video_id}")
             return ""
         
         try:
             # Try standard formatter
             formatter = TextFormatter()
-            return formatter.format_transcript(data)
+            transcript = formatter.format_transcript(data)
+            print(f"[TranscriptAgent] Transcript fetched: {len(transcript)} characters")
+            return transcript
         except Exception as e:
             # Manual fallback formatting if TextFormatter fails or data structure is unexpected
             if isinstance(data, list):
-                return " ".join([seg.get('text', '') if isinstance(seg, dict) else getattr(seg, 'text', '') for seg in data])
+                transcript = " ".join([seg.get('text', '') if isinstance(seg, dict) else getattr(seg, 'text', '') for seg in data])
+                print(f"[TranscriptAgent] Transcript fetched (fallback): {len(transcript)} characters")
+                return transcript
             return str(data)
 
     @staticmethod

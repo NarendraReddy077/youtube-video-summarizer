@@ -55,7 +55,10 @@ class TimestampAgent:
              import re
              array_match = re.search(r'\[\s*\{.*\}\s*\]', content, re.DOTALL)
              if array_match:
-                 return json.loads(array_match.group(0))
+                 moments = json.loads(array_match.group(0))
+                 print(f"[TimestampAgent] Extracted {len(moments)} key moments")
+                 return moments
+             print("[TimestampAgent] No key moments found in LLM response")
              return []
         except Exception as e:
             print(f"Timestamp Agent Error: {e}")

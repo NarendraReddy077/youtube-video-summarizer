@@ -12,4 +12,5 @@ class PreprocessingAgent:
         if not transcript_text:
             return []
         chunks = self.text_splitter.split_text(transcript_text)
+        print(f"[PreprocessingAgent] Transcript split into {len(chunks)} chunks")
         return chunks

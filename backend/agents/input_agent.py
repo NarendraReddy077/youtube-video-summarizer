@@ -20,5 +20,7 @@ class InputAgent:
         )
         match = re.match(youtube_regex, url)
         if match:
-            return match.group(6)
+            video_id = match.group(6)
+            print(f"\n[InputAgent] Video ID extracted: {video_id}")
+            return video_id
         return ""

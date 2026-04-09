@@ -35,11 +35,12 @@ class SummarizationAgent:
 
     def summarize(self, transcript_chunks: list[str]) -> str:
         combined_text = " ".join(transcript_chunks)
-        print(f"Generating summary for text of length: {len(combined_text)}")
+        print(f"[SummarizationAgent] Generating summary for text of length: {len(combined_text)}")
         
         try:
             # Limiting to 12k characters for demo purposes, roughly 3000-4000 tokens
             response = self.chain.invoke({"transcript": combined_text[:12000]})
+            print(f"[SummarizationAgent] Response received: {response[:200]}...")
             return response
         except httpx.ConnectError:
             raise Exception(f"Connection Error: Ollama is not running at {settings.ollama_base_url}. Please ensure Ollama is started.")

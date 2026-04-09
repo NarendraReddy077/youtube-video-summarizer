@@ -64,17 +64,21 @@ async def process_video(request: VideoRequest, db: Session = Depends(get_db)):
          }
 
     # 2. Get Transcript
+    print("\n[Workflow] 1. Fetching transcript...")
     transcript_raw = transcript_agent.get_transcript(video_id)
     if not transcript_raw or len(transcript_raw.strip()) < 5:
         raise HTTPException(status_code=400, detail="This video does not have available captions. Please try a video with manual or auto-generated subtitles.")
 
+    print("[Workflow] 2. Extracting key moments...")
     transcript_timed = transcript_agent.get_transcript_with_timestamps(video_id)
     key_moments = timestamp_agent.extract_key_moments(transcript_timed)
     
     # 3. Preprocess
+    print("[Workflow] 3. Chunking transcript for RAG...")
     chunks = preprocessing_agent.chunk_transcript(transcript_raw)
 
     # 4. Summarize
+    print("[Workflow] 4. Generating summary with LLM...")
     try:
         summary_response = summarization_agent.summarize(chunks)
     except Exception as e:
@@ -130,10 +134,12 @@ async def process_video(request: VideoRequest, db: Session = Depends(get_db)):
         }
 
     # 5. RAG Storage
+    print("[Workflow] 5. Storing embeddings in Vector DB...")
     chunk_metadatas = [{"source": video_id} for _ in chunks]
     qna_agent.generate_embeddings(chunks, chunk_metadatas, video_id)
 
     # 6. SQL Storage
+    print("[Workflow] 6. Saving to SQL Database...")
     new_video = Video(
         id=video_id,
         url=request.url,
@@ -144,6 +150,8 @@ async def process_video(request: VideoRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_video)
 
+    print(f"[Workflow] SUCCESS: Video {video_id} processed completely.\n")
+
     return {
         "status": "success", 
         "video_id": video_id, 
@@ -153,6 +161,7 @@ async def process_video(request: VideoRequest, db: Session = Depends(get_db)):
 
 @router.post("/query")
 async def query_video(request: QueryRequest):
+    print(f"\n[Workflow] Processing query for video {request.video_id}: '{request.query}'")
     answer = qna_agent.query_video(request.video_id, request.query)
-    # Even if QnA agent catches the error, we still want to indicate Success here unless it's a catastrophic failure
+    print(f"[Workflow] Query process complete.\n")
     return {"status": "success", "answer": answer}

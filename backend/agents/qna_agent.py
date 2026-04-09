@@ -88,10 +88,16 @@ class QnAAgent:
                 answer = response.get("answer", "")
                 
                 # Ensure answer is a string (handle AIMessage if necessary)
+                final_answer = ""
                 if hasattr(answer, "content"):
-                    return answer.content
-                return str(answer) if answer else "Could not generate an answer."
+                    final_answer = answer.content
+                else:
+                    final_answer = str(answer) if answer else "Could not generate an answer."
+                
+                print(f"[QnAAgent] Answer generated: {final_answer[:150]}...")
+                return final_answer
             else:
+                print("[QnAAgent] No context found to answer.")
                 return "The transcript for this video seems too short or empty. I cannot find enough context to answer."
         except httpx.ConnectError:
             return f"Ollama Connection Error: Please ensure Ollama is running at {settings.ollama_base_url}."
