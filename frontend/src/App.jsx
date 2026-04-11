@@ -130,6 +130,13 @@ function App() {
           </div>
         )}
       </main>
+
+      {/* Footer */}
+      <footer className="relative z-10 py-1 text-center border-t border-white/5 bg-surface/30 backdrop-blur-md mt-auto">
+        <p className="text-sm font-bold text-green-500/50 tracking-wider uppercase">
+          Retrieval-Augmented Generation in action.
+        </p>
+      </footer>
     </div>
   );
 }
