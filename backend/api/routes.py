@@ -94,44 +94,61 @@ async def process_video(request: VideoRequest, db: Session = Depends(get_db)):
     
     # Clean up JSON if necessary
     processed_response = summary_response.strip()
+    summary_data = {"summary": processed_response, "key_points": []}
+    
+    # 1. Try to find JSON block in markdown
+    content_inside = processed_response
+    if content_inside.startswith("```"):
+        match = re.search(r'```(?:json)?\s*(.*?)\s*```', content_inside, re.DOTALL)
+        if match: content_inside = match.group(1).strip()
+    else:
+        start = content_inside.find('{')
+        end = content_inside.rfind('}')
+        if start != -1 and end != -1 and end > start:
+            content_inside = content_inside[start:end+1]
+
     try:
-        # 1. Try to find JSON block in markdown
-        json_match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', processed_response, re.DOTALL)
-        if json_match:
-            try:
-                summary_data = json.loads(json_match.group(1))
-            except:
-                # Fallback to the whole cleaned content inside backticks
-                content_inside = json_match.group(1)
-                summary_data = {"summary": content_inside, "key_points": []}
+        data = json.loads(content_inside)
+        if isinstance(data, dict):
+            summary_data = data
+    except:
+        # Robust fallback parsing for summary and key_points if json.loads fails
+        parsed_summary = ""
+        parsed_points = []
+        
+        sum_match = re.search(r'"summary"\s*:\s*"(.*?)"\s*(?:,\s*"key_points"|}*$)', content_inside, re.DOTALL | re.IGNORECASE)
+        if sum_match:
+            parsed_summary = sum_match.group(1).replace('\\"', '"').replace('\\n', '\n')
         else:
-            # 2. Try to find any curly brace structure
-            json_match = re.search(r'(\{.*\})', processed_response, re.DOTALL)
-            if json_match:
-                try:
-                    summary_data = json.loads(json_match.group(1))
-                except:
-                    summary_data = {"summary": processed_response, "key_points": []}
+            sum_match = re.search(r'"summary"\s*:\s*"(.*)', content_inside, re.DOTALL | re.IGNORECASE)
+            if sum_match:
+                val = sum_match.group(1)
+                val = re.sub(r'",\s*"key_points"\s*:.*$', '', val, flags=re.DOTALL)
+                if val.endswith('"'): val = val[:-1]
+                if val.endswith('"}'): val = val[:-2]
+                parsed_summary = val.replace('\\"', '"').replace('\\n', '\n')
             else:
-                # 3. Fallback to raw string
-                summary_data = {"summary": processed_response, "key_points": []}
-        
-        # Ensure it has the required fields and they are the right types
-        if not isinstance(summary_data, dict):
-            summary_data = {"summary": str(summary_data), "key_points": []}
+                parsed_summary = content_inside
+                
+        kp_match = re.search(r'"key_points"\s*:\s*\[(.*?)\]', content_inside, re.DOTALL | re.IGNORECASE)
+        if not kp_match:
+            kp_match = re.search(r'"key_points"\s*:\s*\[(.*)', content_inside, re.DOTALL | re.IGNORECASE)
             
-        if "summary" not in summary_data:
-             summary_data["summary"] = processed_response
-        
-        if "key_points" not in summary_data or not isinstance(summary_data["key_points"], list):
-            summary_data["key_points"] = []
+        if kp_match:
+            points_str = kp_match.group(1)
+            pts = re.findall(r'"(.*?)"', points_str)
+            parsed_points = [p.replace('\\"', '"') for p in pts]
             
-    except Exception as e:
-        print(f"JSON Parsing fully failed: {e}")
-        summary_data = {
-            "summary": summary_response,
-            "key_points": []
-        }
+        summary_data = {"summary": parsed_summary, "key_points": parsed_points}
+
+    if not isinstance(summary_data, dict):
+        summary_data = {"summary": str(summary_data), "key_points": []}
+        
+    if "summary" not in summary_data:
+        summary_data["summary"] = processed_response
+    
+    if "key_points" not in summary_data or not isinstance(summary_data["key_points"], list):
+        summary_data["key_points"] = []
 
     # 5. RAG Storage
     print("[Workflow] 5. Storing embeddings in Vector DB...")

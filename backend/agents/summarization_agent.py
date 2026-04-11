@@ -16,7 +16,9 @@ class SummarizationAgent:
             model=settings.ollama_model, 
             base_url=settings.ollama_base_url,
             client_kwargs={"headers": headers},
-            timeout=60.0 # Increased timeout for longer videos/slower local LLMs
+            timeout=120.0, # Increased timeout for longer videos/slower local LLMs
+            num_predict=2048, # Ensure enough output tokens
+            format="json"
         )
         self.summary_prompt = PromptTemplate.from_template(
             """You are an expert summarizer. Below is a video transcript.

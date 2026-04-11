@@ -75,28 +75,28 @@ export default function SummaryView({ data, timeline, videoId }) {
           </div>
         </div>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
-          <div className="space-y-10">
-            {/* Executive Summary */}
-            <section className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="h-6 w-1 bg-primary rounded-full shadow-[0_0_10px_rgba(20,184,166,0.6)]" />
-                <h3 className="text-xl font-bold text-white uppercase tracking-wider">The Summary</h3>
-              </div>
-              <p className="text-lg text-textMain leading-relaxed font-medium">
-                {data.summary || "Generating abstract..."}
-              </p>
-            </section>
+        {/* Content Section */}
+        <div className="flex flex-col gap-10">
+          {/* Executive Summary */}
+          <section className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="h-6 w-1 bg-primary rounded-full shadow-[0_0_10px_rgba(20,184,166,0.6)]" />
+              <h3 className="text-xl font-bold text-white uppercase tracking-wider">The Summary</h3>
+            </div>
+            <p className="text-lg text-textMain leading-relaxed font-medium whitespace-pre-line">
+              {data.summary || "Generating abstract..."}
+            </p>
+          </section>
 
-            {/* Key Takeaways */}
+          {/* Key Takeaways */}
+          {data.key_points && data.key_points.length > 0 && (
             <section className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="h-6 w-1 bg-secondary rounded-full shadow-[0_0_10px_rgba(34,211,238,0.6)]" />
                 <h3 className="text-xl font-bold text-white uppercase tracking-wider">Key Insights</h3>
               </div>
-              <div className="grid grid-cols-1 gap-3">
-                {data.key_points?.map((point, idx) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {data.key_points.map((point, idx) => (
                   <div key={idx} className="p-4 rounded-xl bg-white/[0.03] border border-white/5 flex gap-4 group/item hover:bg-white/[0.06] transition-all duration-300">
                     <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 text-secondary font-black text-xs">
                       {idx + 1}
@@ -108,16 +108,16 @@ export default function SummaryView({ data, timeline, videoId }) {
                 ))}
               </div>
             </section>
-          </div>
+          )}
 
-          {/* Timeline Section - Side Column on Desktop */}
+          {/* Timeline Section */}
           {timeline && timeline.length > 0 && (
             <section className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="h-6 w-1 bg-accent rounded-full shadow-[0_0_10px_rgba(139,92,246,0.6)]" />
                 <h3 className="text-xl font-bold text-white uppercase tracking-wider">Timeline</h3>
               </div>
-              <div className="max-h-[500px] overflow-y-auto pr-2 custom-scrollbar space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
                 {timeline.map((item, idx) => (
                   <button
                     key={idx}

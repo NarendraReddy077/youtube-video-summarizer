@@ -31,9 +31,9 @@ class TimestampAgent:
         )
 
     def extract_key_moments(self, transcript_timed: list[dict]) -> list[dict]:
-        # Sample every 5th segment to reduce token usage but maintain coverage
+        # Sample every 5th segment to give the LLM more context while staying within budget
         sampled_data = []
-        for i in range(0, len(transcript_timed), 10):
+        for i in range(0, len(transcript_timed), 5):
             seg = transcript_timed[i]
             start = seg.get('start', 0.0) if isinstance(seg, dict) else getattr(seg, 'start', 0.0)
             text = seg.get('text', '') if isinstance(seg, dict) else getattr(seg, 'text', '')
@@ -42,22 +42,41 @@ class TimestampAgent:
                 "txt": text[:100]
             })
         
-        # Limit to first 50 sampled segments for budget
-        input_data = json.dumps(sampled_data[:50])
+        # Limit to first 100 sampled segments for better coverage
+        input_data = json.dumps(sampled_data[:100])
         
         try:
              chain = self.timestamp_prompt | self.llm
              response = chain.invoke({"transcript_data": input_data})
              
              content = response.content if hasattr(response, "content") else str(response)
+             print(f"[TimestampAgent] LLM Response: {content[:100]}...")
+
+             # Robust JSON Extraction
+             moments = []
              
-             # Extract JSON array
+             # 1. Try markdown code block
              import re
-             array_match = re.search(r'\[\s*\{.*\}\s*\]', content, re.DOTALL)
-             if array_match:
-                 moments = json.loads(array_match.group(0))
+             code_match = re.search(r'```(?:json)?\s*(\[.*?\])\s*```', content, re.DOTALL)
+             if code_match:
+                 try:
+                     moments = json.loads(code_match.group(1))
+                 except:
+                     pass
+             
+             # 2. Try raw array match if not found or failed
+             if not moments:
+                 array_match = re.search(r'(\[.*\])', content, re.DOTALL)
+                 if array_match:
+                     try:
+                         moments = json.loads(array_match.group(1))
+                     except:
+                         pass
+             
+             if moments and isinstance(moments, list):
                  print(f"[TimestampAgent] Extracted {len(moments)} key moments")
                  return moments
+             
              print("[TimestampAgent] No key moments found in LLM response")
              return []
         except Exception as e:
