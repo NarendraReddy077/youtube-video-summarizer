@@ -1,4 +1,4 @@
-# 📺 YouTube Video Summarizer Agent
+# YT INTELLIGENCE
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![LangChain](https://img.shields.io/badge/LangChain-121212?style=for-the-badge&logo=chainlink&logoColor=white)](https://langchain.com/)
@@ -6,19 +6,19 @@
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-The **YouTube Video Summarizer Agent** is an advanced, multi-agent AI system that transforms long-form YouTube videos into structured, interactive knowledge. By leveraging Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG), users can summarize content, navigate via timestamps, and directly "chat" with any video.
+The **YT Intelligence - YouTube Video Summarizer Agent** is an advanced, multi-agent AI system that transforms long-form YouTube videos into structured, interactive knowledge. By leveraging Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG), users can summarize content, navigate via timestamps, and directly "chat" with any video.
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-- 🛡️ **Powered by GPT-OSS**: Advanced inference via the `gpt-oss:20b` model for high-quality summaries and reasoning.
-- 🗄️ **Persistent Knowledge**: Uses **SQLAlchemy** and SQLite for robust and lightweight relational data management.
-- 📑 **Instant Summarization**: Generate concise, high-level summaries and key insights in seconds.
-- 🕒 **Timestamp Integration**: Directly jump to specific video segments based on the summary and timeline.
-- 💬 **Interactive Q&A (Chat with Video)**: Ask any question about the video's content and get context-aware answers.
-- 🤖 **Multi-Agent Architecture**: Modular design with specialized agents for transcripts, preprocessing, summarization, and RAG.
-- 🌍 **Multi-Language Support**: Handles various transcript types and attempts auto-translation or speech-to-text (Whisper integration).
+-  **Powered by GPT-OSS**: Advanced inference via the `gpt-oss:20b` model for high-quality summaries and reasoning.
+-  **Persistent Knowledge**: Uses **SQLAlchemy** and SQLite for robust and lightweight relational data management.
+-  **Instant Summarization**: Generate concise, high-level summaries and key insights in seconds.
+-  **Timestamp Integration**: Directly jump to specific video segments based on the summary and timeline.
+-  **Interactive Q&A (Chat with Video)**: Ask any question about the video's content and get context-aware answers.
+-  **Multi-Agent Architecture**: Modular design with specialized agents for transcripts, preprocessing, summarization, and RAG.
+-  **Multi-Language Support**: Handles various transcript types and attempts auto-translation or speech-to-text (Whisper integration).
 
 ---
 
@@ -35,7 +35,7 @@ The **YouTube Video Summarizer Agent** is an advanced, multi-agent AI system tha
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 The system operates as a pipeline of specialized agents:
 
@@ -90,7 +90,7 @@ The system operates as a pipeline of specialized agents:
 
 ---
 
-## 🏁 Running the Application
+## Running the Application
 
 You can use the provided batch script to launch both servers simultaneously:
 
